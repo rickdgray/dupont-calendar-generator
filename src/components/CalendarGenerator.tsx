@@ -3,7 +3,6 @@ import { Calendar, Download, Moon, Sun } from 'lucide-react';
 
 const CalendarGenerator = () => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [showCalendar, setShowCalendar] = useState(false);
   const [startDay, setStartDay] = useState(0);
   const [darkMode, setDarkMode] = useState<'light' | 'dark' | 'system'>('system');
   const [effectiveDarkMode, setEffectiveDarkMode] = useState(false);
@@ -13,13 +12,14 @@ const CalendarGenerator = () => {
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ];
 
-  // Modified Dupont schedule pattern (28 days total)
   const dupontPattern = [
-    'N', 'N', 'N', 'N', 'O', 'O', 'O', 'D', 'D', 'D', 'O', 'N', 'N', 'N',
-    'O', 'O', 'O', 'D', 'D', 'D', 'D', 'R', 'R', 'R', 'R', 'R', 'O', 'O'
+    'N', 'N', 'N', 'N', 'O', 'O', 'O',
+    'D', 'D', 'D', 'O', 'N', 'N', 'N',
+    'O', 'O', 'O', 'D', 'D', 'D', 'D',
+    'R', 'R', 'R', 'R', 'R', 'R', 'R',
+    'O', 'O', 'O', 'O', 'O', 'O', 'O'
   ];
 
-  // Handle dark mode based on system preference and user choice
   useEffect(() => {
     const updateDarkMode = () => {
       if (darkMode === 'system') {
@@ -61,10 +61,6 @@ const CalendarGenerator = () => {
     const diff = new Date(year, month, day).getTime() - start.getTime();
     const oneDay = 1000 * 60 * 60 * 24;
     return Math.floor(diff / oneDay);
-  };
-
-  const generateCalendar = () => {
-    setShowCalendar(true);
   };
 
   const handlePrint = () => {
@@ -118,7 +114,7 @@ const CalendarGenerator = () => {
 
                 <div className="flex items-center gap-2">
                   <label htmlFor="startDay" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Jan 1 is day:
+                    Jan 1 is 
                   </label>
                   <select
                     id="startDay"
@@ -135,109 +131,87 @@ const CalendarGenerator = () => {
                 </div>
                 
                 <button
-                  onClick={generateCalendar}
-                  className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-medium"
+                  onClick={handlePrint}
+                  className="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
                 >
-                  Generate
+                  <Download size={18} />
+                  Print
                 </button>
-                
-                {showCalendar && (
-                  <button
-                    onClick={handlePrint}
-                    className="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
-                  >
-                    <Download size={18} />
-                    Print/Save PDF
-                  </button>
-                )}
               </div>
             </div>
           </div>
         </div>
 
         {/* Calendar Display */}
-        {showCalendar && (
-          <div className="p-8 print:p-0">
-            <div className="bg-white dark:bg-gray-800 print:bg-white max-w-full mx-auto print:max-w-none transition-colors">
-              {/* Title - Centered for print */}
-              <h2 className="text-3xl font-bold text-center mb-6 print:mb-4 print:text-4xl text-gray-900 dark:text-gray-100 print:text-gray-900">
-                {year} Calendar
-              </h2>
-              
-              {/* Calendar Table */}
-              <div className="overflow-x-auto print:overflow-visible">
-                <table className="w-full border-collapse table-fixed" style={{ pageBreakInside: 'avoid' }}>
-                  <thead>
-                    <tr>
-                      {monthNames.map((month) => (
-                        <th
-                          key={month}
-                          className="border-2 border-gray-800 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 p-2 text-sm font-bold text-gray-700 dark:text-gray-200 print:text-base print:bg-gray-100 print:border-gray-800 print:text-gray-700"
-                        >
-                          {month}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.from({ length: maxDays }, (_, dayIndex) => {
-                      const dayNumber = dayIndex + 1;
-                      return (
-                        <tr key={dayNumber}>
-                          {monthNames.map((_, monthIndex) => {
-                            const daysInMonth = getDaysInMonth(year, monthIndex);
-                            const isValidDay = dayNumber <= daysInMonth;
-                            
-                            if (!isValidDay) {
-                              return (
-                                <td
-                                  key={monthIndex}
-                                  className="border-2 border-gray-800 dark:border-gray-600 p-2 bg-gray-200 dark:bg-gray-900 print:bg-gray-200 print:border-gray-800"
-                                />
-                              );
-                            }
-                            
-                            const date = new Date(year, monthIndex, dayNumber);
-                            const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' })[0];
-                            const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-                            const dayOfYear = getDayOfYear(year, monthIndex, dayNumber);
-                            const shift = getDupontShift(dayOfYear, startDay);
-                            
+        <div className="p-8 print:p-0">
+          <div className="bg-white dark:bg-gray-800 print:bg-white max-w-full mx-auto print:max-w-none transition-colors">
+            {/* Title - Centered for print */}
+            <h2 className="text-3xl font-bold text-center mb-6 print:mb-4 print:text-4xl text-gray-900 dark:text-gray-100 print:text-gray-900">
+              {year} Calendar
+            </h2>
+            
+            {/* Calendar Table */}
+            <div className="overflow-x-auto print:overflow-visible">
+              <table className="w-full border-collapse table-fixed" style={{ pageBreakInside: 'avoid' }}>
+                <thead>
+                  <tr>
+                    {monthNames.map((month) => (
+                      <th
+                        key={month}
+                        className="border-2 border-gray-800 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 p-2 text-sm font-bold text-gray-700 dark:text-gray-200 print:text-base print:bg-gray-100 print:border-gray-800 print:text-gray-700"
+                      >
+                        {month}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: maxDays }, (_, dayIndex) => {
+                    const dayNumber = dayIndex + 1;
+                    return (
+                      <tr key={dayNumber}>
+                        {monthNames.map((_, monthIndex) => {
+                          const daysInMonth = getDaysInMonth(year, monthIndex);
+                          const isValidDay = dayNumber <= daysInMonth;
+                          
+                          if (!isValidDay) {
                             return (
                               <td
                                 key={monthIndex}
-                                className={`border-2 border-gray-800 dark:border-gray-600 p-2 text-left text-xs print:text-xs h-8 print:border-gray-800 dark:bg-gray-800 dark:text-gray-100 print:bg-white print:text-gray-900 ${
-                                  isWeekend ? 'bg-blue-50 dark:bg-blue-900/30 print:bg-blue-50' : ''
-                                }`}
-                              >
-                                <div className="flex items-center gap-1">
-                                  <span className="font-medium w-5">{dayNumber}</span>
-                                  <span className="font-medium w-3">{dayOfWeek}</span>
-                                  {shift !== 'O' && <span className="font-bold w-3">{shift}</span>}
-                                </div>
-                              </td>
+                                className="border-2 border-gray-800 dark:border-gray-600 p-2 bg-gray-200 dark:bg-gray-900 print:bg-gray-200 print:border-gray-800"
+                              />
                             );
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                          }
+                          
+                          const date = new Date(year, monthIndex, dayNumber);
+                          const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' })[0];
+                          const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                          const dayOfYear = getDayOfYear(year, monthIndex, dayNumber);
+                          const shift = getDupontShift(dayOfYear, startDay);
+                          
+                          return (
+                            <td
+                              key={monthIndex}
+                              className={`border-2 border-gray-800 dark:border-gray-600 p-2 text-left text-xs print:text-xs h-8 print:border-gray-800 dark:bg-gray-800 dark:text-gray-100 print:bg-white print:text-gray-900 ${
+                                isWeekend ? 'bg-blue-50 dark:bg-blue-900/30 print:bg-blue-50' : ''
+                              }`}
+                            >
+                              <div className="flex items-center gap-1">
+                                <span className="font-medium w-5">{dayNumber}</span>
+                                <span className="font-medium w-3">{dayOfWeek}</span>
+                                {shift !== 'O' && <span className="font-bold w-3">{shift}</span>}
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
-        )}
-
-        {!showCalendar && (
-          <div className="flex items-center justify-center h-96">
-            <div className="text-center">
-              <Calendar className="mx-auto text-gray-400 dark:text-gray-500 mb-4" size={64} />
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
-                Select a year and click "Generate" to create your calendar
-              </p>
-            </div>
-          </div>
-        )}
+        </div>
 
         {/* Print Styles */}
         <style>{`
