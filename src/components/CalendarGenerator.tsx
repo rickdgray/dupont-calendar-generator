@@ -16,8 +16,8 @@ const CalendarGenerator = () => {
     'N', 'N', 'N', 'N', 'O', 'O', 'O',
     'D', 'D', 'D', 'O', 'N', 'N', 'N',
     'O', 'O', 'O', 'D', 'D', 'D', 'D',
-    'R', 'R', 'R', 'R', 'R', 'R', 'R',
-    'O', 'O', 'O', 'O', 'O', 'O', 'O'
+    'O', 'O', 'O', 'O', 'O', 'O', 'O',
+    'O', 'R', 'R', 'R', 'R', 'R', 'O'
   ];
 
   useEffect(() => {
