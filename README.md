@@ -6,7 +6,7 @@ A modern, printable calendar generator designed for the modified DuPont rotating
 
 The DuPont schedule is a rotating shift pattern that provides continuous 24/7 coverage. This tool generates calendars for a **modified DuPont schedule** that includes five distinct phases over a 35-day cycle:
 
-### Schedule Pattern (28 Days)
+### Schedule Pattern (5 Weeks)
 1. **4 Night Shifts** (Days 1-4)
 2. **3 Days Off** (Days 5-7)
 3. **3 Day Shifts** (Days 8-10)
