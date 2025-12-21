@@ -221,6 +221,13 @@ const CalendarGenerator = () => {
               margin: 0.5cm;
             }
             
+            /* Force light mode colors for printing */
+            * {
+              background-color: white !important;
+              color: black !important;
+              border-color: #1f2937 !important;
+            }
+            
             body {
               print-color-adjust: exact;
               -webkit-print-color-adjust: exact;
@@ -230,13 +237,25 @@ const CalendarGenerator = () => {
               font-size: 10px;
             }
             
-            th, td {
-              padding: 4px !important;
+            th {
+              background-color: #f3f4f6 !important;
+              color: #374151 !important;
             }
             
             td {
               height: 0.4cm !important;
               min-height: 0.4cm !important;
+              padding: 4px !important;
+            }
+            
+            /* Weekend highlighting */
+            .bg-blue-50 {
+              background-color: #eff6ff !important;
+            }
+            
+            /* Invalid day cells */
+            .bg-gray-200 {
+              background-color: #e5e7eb !important;
             }
           }
         `}</style>
